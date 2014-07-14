@@ -32,7 +32,7 @@ gem 'devise'
 gem 'cancan'
 gem 'rolify'
 gem 'twilio-ruby', '~> 3.11'
-
+gem 'cleverbot', '~> 0.2.0'
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
