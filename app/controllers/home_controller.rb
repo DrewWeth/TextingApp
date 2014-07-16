@@ -48,15 +48,15 @@ class HomeController < ActionController::Base
 			@params = Cleverbot::Client.write t.body
 			message = Message.find(t.id)
 			begin
-				message.res_text = "fixing"
+				message.res_text = @params['message']
 				message.save
 			
 
-			# @client.account.messages.create(
-			# 	:from => '+13147363270',
-			# 	:to => t.from,
-			# 	:body => @params['message']
-			# )
+				@client.account.messages.create(
+					:from => '+13147363270',
+					:to => t.from,
+					:body => @params['message']
+				)
 				message.response = true
 				message.save
 			rescue Exception => e
