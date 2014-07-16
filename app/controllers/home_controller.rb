@@ -11,60 +11,12 @@ class HomeController < ActionController::Base
 		rescue Twilio::RESR::RequestError => e
 			puts e.message
 		end
-		if Log.find(:all).empty?
-			log = Log.new
-			log.last_serve = DateTime.now
-			log.save
-		end
-
-		log = Log.find(1)
-		logDate = log.last_serve
-		# .where(DateSent >= logDate.strftime("%Y/%m/%d"))
-		# Change this to notifications
-		messagesFromTwilio = @client.account.messages.list({:date_created => logDate})
-		messagesFromTwilio.each do |m|
-			begin
-				message = Message.new(
-					:sid => m.sid,
-					:body => m.body,
-					:to => m.to,
-					:from => m.from,
-					:created => m.date_created,
-					:response => false
-					)
-				message.save
-			rescue Exception => e
-				puts e
-			end
-		end
-		puts "Messages from Twilio"
-		puts messagesFromTwilio.count
-		log.last_serve = DateTime.now
-		log.save
-
-		temp = Message.all.where(response: false).where.not(from: "+13147363270")
-		puts temp.count
-		temp.each do |t|
-			@params = Cleverbot::Client.write t.body
-			message = Message.find(t.id)
-			begin
-				message.res_text = @params['message']
-				message.save
-			
-
-				@client.account.messages.create(
-					:from => '+13147363270',
-					:to => t.from,
-					:body => @params['message']
-				)
-				message.response = true
-				message.save
-			rescue Exception => e
-				puts e
-			end
-		end
 		
-		@update_message = temp.all
+		puts "Messages from Twilio"		
+
+		sendMessage
+
+	
 	end
 
 	def index
@@ -79,5 +31,33 @@ class HomeController < ActionController::Base
 
 	end
 
-
+	private 
+	def sendMessage
+		require 'twilio-ruby'
+		require 'cleverbot'
+		# temp = Message.all.where(response: false).where.not(from: "+13147363270")
+		# puts temp.count
+		prng = Random.new_seed
+		arr = ["It's my birthday", "Hey it's my bday", "Tell me happy birthday", "Guess whose birthday it is!", "Is it my birthday", "What is today? Its my birthday", "Yay its my birthday"]
+		20.times do
+			num = rand(arr.size)
+			@params = Cleverbot::Client.write arr[num]
+			begin
+				res_text = @params['message']			
+				# 
+				@client.account.messages.create(
+					:from => '+13147363270',
+					:to => '+14172092813',
+					:body => @params['message']
+				)
+			rescue Exception => e
+				puts e
+			end
+		end
+		@client.account.messages.create(
+			:from => '+13147363270',
+			:to => '+14172092813',
+			:body => 'This one isnt random. Happy birthday -- 21 texts for 21 years.'
+		)
+	end
 end
