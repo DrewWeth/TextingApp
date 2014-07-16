@@ -11,7 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140714223933) do
+ActiveRecord::Schema.define(version: 20140716003827) do
+
+  create_table "logs", force: true do |t|
+    t.datetime "last_serve"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "messages", force: true do |t|
+    t.string   "sid"
+    t.string   "body"
+    t.string   "to"
+    t.string   "from"
+    t.datetime "created"
+    t.boolean  "response"
+    t.string   "res_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", force: true do |t|
     t.string   "name"
