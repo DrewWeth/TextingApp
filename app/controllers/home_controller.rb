@@ -3,11 +3,6 @@ class HomeController < ActionController::Base
 		require 'twilio-ruby'
 		require 'cleverbot'
 
-		if session[:pageReloadCount] == nil
-			session[:pageReloadCount] = 0
-		end
-		session[:pageReloadCount] += 1
-
 		puts "Twilio authentication"
 		account_sid = 'AC29e7b96239c5f0bfc6ab8b724e263f30'
 		auth_token = 'e9befab8a2ea884e92db21709fe073e1'
@@ -15,6 +10,11 @@ class HomeController < ActionController::Base
 			@client = Twilio::REST::Client.new account_sid, auth_token
 		rescue Twilio::RESR::RequestError => e
 			puts e.message
+		end
+		if Log.find(:all).empty?
+			log = Log.new
+			log.last_serve = DateTime.now
+			log.save
 		end
 
 		log = Log.find(1)
@@ -45,9 +45,9 @@ class HomeController < ActionController::Base
 		temp = Message.all.where(response: false).where.not(from: "+13147363270")
 		puts temp.count
 		temp.each do |t|
-			# @params = Cleverbot::Client.write t.body
+			@params = Cleverbot::Client.write t.body
 			message = Message.find(t.id)
-			begin 
+			begin
 				message.res_text = "fixing"
 				message.save
 			
@@ -63,6 +63,8 @@ class HomeController < ActionController::Base
 				puts e
 			end
 		end
+		
+		@update_message = temp.all
 	end
 
 	def index
