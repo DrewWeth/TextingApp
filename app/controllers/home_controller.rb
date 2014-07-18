@@ -1,4 +1,9 @@
 class HomeController < ActionController::Base
+
+	def index
+	end
+
+
 	def update
 		require 'twilio-ruby'
 		require 'cleverbot'
@@ -69,9 +74,6 @@ class HomeController < ActionController::Base
 				puts e
 			end
 		end
-	end
-
-	def index
 	end
 
 	def all
