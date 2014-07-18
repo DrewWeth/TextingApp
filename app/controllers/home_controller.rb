@@ -45,17 +45,24 @@ class HomeController < ActionController::Base
 		temp = Message.all.where(response: false).where.not(from: "+13147363270")
 		puts temp.count
 		temp.each do |t|
-			@params = Cleverbot::Client.write t.body
+			first_time = Message.all.where(from: t.from).count
+			if first_time == 1
+				text_to_send = "Hi, I'm CleverBot. Text me anything! Made by Drew."
+			else
+				@params = Cleverbot::Client.write t.body
+				text_to_send = @params['message']
+			end
+			
+			
 			message = Message.find(t.id)
 			begin
-				message.res_text = @params['message']
+				message.res_text = text_to_send
 				message.save
 			
-
 				@client.account.messages.create(
 					:from => '+13147363270',
 					:to => t.from,
-					:body => @params['message']
+					:body => text_to_send
 				)
 				message.response = true
 				message.save
