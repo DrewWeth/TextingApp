@@ -47,7 +47,7 @@ class HomeController < ActionController::Base
 		log.last_serve = DateTime.now
 		log.save
 
-		temp = Message.all.where(response: false).where.not(from: "+13147363270")
+		temp = Message.all.where(response: false).where.not(from: "+13147363270").where.not(from: "+14152339273")
 		temp.each do |t|
 			first_time = Message.all.where(from: t.from).count
 			text_to_send = "Woopsi. Error!"
