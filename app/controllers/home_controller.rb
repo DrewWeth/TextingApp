@@ -11,51 +11,75 @@ class HomeController < ActionController::Base
 		rescue Twilio::RESR::RequestError => e
 			puts e.message
 		end
-		
-		puts "Messages from Twilio"		
-
-		sendMessage
-	end
-
-	def index
-
-		messages = Message.all.where(response: false)
-		messages.each do |m|
-			user = Message.find(m.id)
-			user.response = true
-			user.save
+		if Log.find(:all).empty?
+			log = Log.new
+			log.last_serve = DateTime.now
+			log.save
 		end
-		puts messages.count
 
-	end
-
-	private 
-	def sendMessage
-		require 'twilio-ruby'
-		require 'cleverbot'
-		# temp = Message.all.where(response: false).where.not(from: "+13147363270")
-		# puts temp.count
-		prng = Random.new_seed
-		arr = ["It's my birthday", "Hey it's my bday", "Tell me happy birthday", "Guess whose birthday it is!", "Is it my birthday", "What is today? Its my birthday", "Yay its my birthday"]
-		20.times do
-			num = rand(arr.size)
-			@params = Cleverbot::Client.write arr[num]
+		log = Log.find(1)
+		logDate = log.last_serve
+		# .where(DateSent >= logDate.strftime("%Y/%m/%d"))
+		# Change this to notifications
+		messagesFromTwilio = @client.account.messages.list({:date_created => logDate})
+		messagesFromTwilio.each do |m|
 			begin
-				res_text = @params['message']			
-				# 
-				@client.account.messages.create(
-					:from => '+1 314 736 3270',
-					:to => '+14172092813',
-					:body => @params['message']
-				)
+				message = Message.new(
+					:sid => m.sid,
+					:body => m.body,
+					:to => m.to,
+					:from => m.from,
+					:created => m.date_created,
+					:response => false
+					)
+				message.save
 			rescue Exception => e
 				puts e
 			end
 		end
-		@client.account.messages.create(
-			:from => '+13147363270',
-			:to => '+14172092813',
-			:body => 'This one isnt random. Happy birthday -- 21 texts for 21 years.'
-		)
+		puts "Messages from Twilio"
+		puts messagesFromTwilio.count
+		log.last_serve = DateTime.now
+		log.save
+
+		temp = Message.all.where(response: false).where.not(from: "+13147363270")
+		temp.each do |t|
+			first_time = Message.all.where(from: t.from).count
+			if first_time == 1
+				text_to_send = "Hi, I'm CleverBot. Text me anything! Made by Drew."
+			else
+				@params = Cleverbot::Client.write t.body
+				text_to_send = @params['message']
+			end
+			
+			
+			message = Message.find(t.id)
+			begin
+				message.res_text = text_to_send
+				message.save
+			
+				@client.account.messages.create(
+					:from => '+13147363270',
+					:to => t.from,
+					:body => text_to_send
+				)
+				message.response = true
+				message.save
+			rescue Exception => e
+				puts e
+			end
+		end
+		
+		@update_message = temp.all
 	end
+
+	def index
+	end
+
+	def all
+		@messages = Message.all
+	end
+
+
+
 end

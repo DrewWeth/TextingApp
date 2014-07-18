@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.1/css/jquery.dataTables.css"/>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.10.1/js/jquery.dataTables.js"></script>
+<h1>Logs</h1>
+
+<table id="logs" class="table">
+  <thead>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+      <th>Body</th>
+      <th>Response</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @messages.each do |post| %>
+      <tr>
+        <td><%= post.from %></td>
+        <td><%= post.to %></td>
+      	<td><%= post.body %></td>
+      	<td><%= post.res_text %></td>
+      	<td><%= post.created_at %></td>
+      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+$('#logs').dataTable();
+</script>
