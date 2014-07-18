@@ -45,13 +45,13 @@ class HomeController < ActionController::Base
 		temp = Message.all.where(response: false).where.not(from: "+13147363270")
 		temp.each do |t|
 			first_time = Message.all.where(from: t.from).count
+			text_to_send = "Woopsi. Error!"
 			if first_time == 1
 				text_to_send = "Hi, I'm CleverBot. Text me anything! Made by Drew."
 			else
 				@params = Cleverbot::Client.write t.body
 				text_to_send = @params['message']
 			end
-			
 			
 			message = Message.find(t.id)
 			begin
@@ -69,8 +69,6 @@ class HomeController < ActionController::Base
 				puts e
 			end
 		end
-		
-		@update_message = temp.all
 	end
 
 	def index
