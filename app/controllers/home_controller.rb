@@ -15,8 +15,6 @@ class HomeController < ActionController::Base
 		puts "Messages from Twilio"		
 
 		sendMessage
-
-	
 	end
 
 	def index
@@ -46,7 +44,7 @@ class HomeController < ActionController::Base
 				res_text = @params['message']			
 				# 
 				@client.account.messages.create(
-					:from => '+13147363270',
+					:from => '+1 314 736 3270',
 					:to => '+14172092813',
 					:body => @params['message']
 				)
