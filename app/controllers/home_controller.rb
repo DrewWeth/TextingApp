@@ -2,8 +2,9 @@ class HomeController < ApplicationController
 	private 
 	
 	def page_visited
-		update = Utility.find(1)
-		if update != nil 
+		
+		if !Utility.take.blank?
+			update = Utility.take
 			update.general_counts += 1
 			update.save
 		else
