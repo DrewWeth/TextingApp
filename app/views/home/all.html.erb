@@ -28,9 +28,9 @@
   </tbody>
 </table>
 
-<br><br><a href="http://druweth.herokuapp.com/">Made by Dru</a>
-
 
 <script>
-$('#logs').dataTable();
+$('#logs').dataTable({
+  "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+});
 </script>

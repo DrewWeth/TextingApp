@@ -1,5 +1,71 @@
-<h1>Welcome to texter with Clever Bot</h1>
-<hr>
-<h3>Text me at: 1(314)736-3270</h3>
+<h1>Clever Text <small>+1 (314) 736-3270</small></h1>
+<hr style="border-color:#428bca">
+<% if !alert.nil? %>
+		<div class="alert alert-info alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		  <%= alert %>
+		</div>
+		
+		<% end %>
+		<% if !notice.nil? %>
+			<div class="alert alert-warning alert-dismissible" role="notice">
+			  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			  <%= notice %>
+			</div>
+		<% end %>
+<div class="row">
+	<div class="col-sm-7">
+		<h3>What is it?</h3>
+		<p>
+			Clever Text, made in June 2014, is a web application combining the <a href="https://www.twilio.com/sms">Twilio texting API</a> and the <a href="https://github.com/benmanns/cleverbot">Clever Bot Ruby Gem</a> allowing any one to text <a href="http://www.cleverbot.com/">Clever Bot</a> from any device with texting capabilities.
+		</p>
 
-<br><br><br><a href="http://druweth.herokuapp.com/">Made by Dru</a>
+		<h3>How do I use it? <span class="glyphicon glyphicon-send"></span></h3>
+		<p>Simply text <b>+1 (314) 736-3270</b> and Clever Text will send you a nice message. Any messages after that are all cleverbot!</h3>
+			<ul>
+				<span class="glyphicon glyphicon-exclamation-sign"></span> Note, you will need to use the international code of "1" before the area code.
+				
+			</ul>
+		</p>
+
+		<h3>This is so awesome, how can I share it?</h3>
+		<p>
+			Simply share this URL <a href="<%= root_url %>"><%= root_url %></a> or, enter your phone number to the right and I'll text you first.
+
+		</p>
+	</div>
+	<div class="col-sm-4">
+		<h3>I'll text you ;)</h3>
+		<form class="form-horizontal" role="form" action="home/subscribe" method="get">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Number</label>
+				<div class="col-sm-10">
+					<input type="tel" name="number" class="form-control" id="inputEmail3" placeholder="+1 (314) 775-9589">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button id="send_first" style="background:transparent;border-color:#428bca;width:100%" type="submit" class="btn btn-default">Go!</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-sm-1">
+	</div>
+</div>
+
+
+<script tyle="text/javascript">
+	$('#send_first').hover(function(){
+		$(this).css('background-color', '#428bca')
+		$(this).css('text-shadow', '0 1px 0 #333');
+		$(this).css('color', 'white');
+	}, function(){
+		$(this).css('background-color', 'transparent').focusout();
+		$(this).css('color', '#333');
+		$(this).css('text-shadow', '0 1px 0 #fff');
+
+
+	});
+</script>

@@ -1,10 +1,21 @@
-class HomeController < ActionController::Base
+class HomeController < ApplicationController
+	private 
+	
+	def page_visited
+		update = Utility.find(1)
+		update.general_counts += 1
+		update.save
+		update.general_counts
+	end
 
+	public
 	def index
+		@count = page_visited
 	end
 
 
 	def update
+		page_visited
 		require 'twilio-ruby'
 		require 'cleverbot'
 
@@ -52,7 +63,7 @@ class HomeController < ActionController::Base
 			first_time = Message.all.where(from: t.from).count
 			text_to_send = "Woopsi. Error!"
 			if first_time == 1
-				text_to_send = "Hi, I'm CleverBot. Text me anything! Made by Drew."
+				text_to_send = "Hi, I'm Clever Text. Text me anything! Made by Drew."
 			else
 				@params = Cleverbot::Client.write t.body
 				text_to_send = @params['message']
@@ -76,7 +87,44 @@ class HomeController < ActionController::Base
 		end
 	end
 
+	def subscribe
+		require 'twilio-ruby'
+
+		number = params[:number]
+		number = number.to_s.gsub('/\D/','').to_i
+		
+
+		if number.to_s.length == 11
+			puts "Twilio authentication"
+			account_sid = 'AC29e7b96239c5f0bfc6ab8b724e263f30'
+			auth_token = 'e9befab8a2ea884e92db21709fe073e1'
+			text_to_send = "Hi, I'm Clever Text. Text me anything! Made by Drew."
+
+			begin
+				@client = Twilio::REST::Client.new account_sid, auth_token
+				@client.account.messages.create(
+					:from => '+13147363270',
+					:to => number,
+					:body => text_to_send
+				)
+				respond_to do |format|
+	          		format.html { redirect_to root_path, notice: 'Text sent to ' + number.to_s }
+      		        format.json { render :show, status: :created, location: root_path }
+	          	end
+			end	
+		else
+			respond_to do |format|
+          		format.html { redirect_to root_path, notice: 'Number invalid. Must be 11 digits. Text not sent.' }
+          		format.json { render :show, status: :created, location: root_path }
+
+			end
+		end
+		
+	end
+
+
 	def all
+		page_visited
 		@messages = Message.all
 	end
 

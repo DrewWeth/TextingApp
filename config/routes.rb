@@ -4,6 +4,8 @@ Texting::Application.routes.draw do
   get '/home/index', to: 'home#index'
   get '/home/update', to: 'home#update'
   get '/home/all', to: 'home#all'
+  get '/home/subscribe', to: 'home#subscribe'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

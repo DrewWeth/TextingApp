@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  general_counts: 1
+  specific_a_counts: 1
+  specific_b_counts: 1
+
+two:
+  general_counts: 1
+  specific_a_counts: 1
+  specific_b_counts: 1

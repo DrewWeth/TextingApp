@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Texting</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= csrf_meta_tags %>
+	<title>Clever Text</title>
+	<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+	<%= csrf_meta_tags %>
 </head>
 <body>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+	<div class="container">
 
-<%= yield %>
-
-
+		<%= yield %>
+		<br><br><span class="glyphicon glyphicon-chevron-right"></span> <a href="http://drewweth.herokuapp.com/">Made by Drew Wetherington</a>
+		<p>
+		<h4 class="pull-right"><small>Visited <%= number_with_delimiter(@count, :delimeter => ',') %> times</small></h4>
+		</p>
+	</div>
 </body>
 </html>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140716003827) do
+ActiveRecord::Schema.define(version: 20140915174721) do
 
   create_table "logs", force: true do |t|
     t.datetime "last_serve"
@@ -66,5 +66,13 @@ ActiveRecord::Schema.define(version: 20140716003827) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
+
+  create_table "utilities", force: true do |t|
+    t.integer  "general_counts",    default: 0
+    t.integer  "specific_a_counts", default: 0
+    t.integer  "specific_b_counts", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
