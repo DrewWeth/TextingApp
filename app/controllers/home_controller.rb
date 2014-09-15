@@ -3,8 +3,12 @@ class HomeController < ApplicationController
 	
 	def page_visited
 		update = Utility.find(1)
-		update.general_counts += 1
-		update.save
+		if update != nil 
+			update.general_counts += 1
+			update.save
+		else
+			Utility.create
+		end
 		update.general_counts
 	end
 
@@ -12,7 +16,6 @@ class HomeController < ApplicationController
 	def index
 		@count = page_visited
 	end
-
 
 	def update
 		page_visited
